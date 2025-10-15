@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GymManagementDAL.Entity
+{
+    internal class Member:GymUser
+    {
+        //JoinDate==CreatedAt
+
+        public string? phone { get; set; }
+
+    }
+}

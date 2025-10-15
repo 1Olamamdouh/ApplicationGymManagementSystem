@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GymManagementDAL.Entity
+{
+    internal class HealthRecord:BaseEntity
+    {
+        public decimal Weight { get; set; }
+        public decimal Height { get; set; }
+        public string BloodType { get; set; }
+        public string Note { get; set; }
+
+
+        //UpdatedAt inherited from BaseEntity
+        //UpadedAt == LastUpdated
+    }
+}
