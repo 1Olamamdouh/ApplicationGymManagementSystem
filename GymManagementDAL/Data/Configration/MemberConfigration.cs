@@ -16,7 +16,7 @@ namespace GymManagementDAL.Data.Configration
 
             builder.Property(X => X.CreatedAt)
                 .HasColumnName("JoinDate") // Rename CreatedAt to JoinDate
-                .HasDefaultValue("GETDATE()"); // Default Value
+                .HasDefaultValueSql("GETDATE()"); // Default Value
 
             base.Configure(builder); // Call base configuration for GymUserConfigration
 

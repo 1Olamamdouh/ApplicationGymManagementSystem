@@ -9,5 +9,15 @@ namespace GymManagementDAL.Entity
     internal class Category: BaseEntity
     {
         public string CategoryName { get; set; }
+
+
+        #region relationships
+
+        #region Category - Session (1 : M)
+        public ICollection<Session> Sessions { get; set; }
+        #endregion
+
+        #endregion
+
     }
 }

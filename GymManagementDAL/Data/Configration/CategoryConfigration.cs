@@ -14,7 +14,16 @@ namespace GymManagementDAL.Data.Configration
         public void Configure(EntityTypeBuilder<Category> builder)
         {
 
-            builder.Property(X => X.CategoryName).HasColumnType("Varchar(20)");
+            builder.Property(X => X.CategoryName)
+                .HasColumnType("Varchar(20)");
+
+            builder.HasMany(X => X.Sessions)
+                   .WithOne(X => X.Category)
+                   .HasForeignKey(X => X.CategoryId);
+
+   
+
+
         }
     }
 }

@@ -23,6 +23,10 @@ namespace GymManagementDAL.Data.Configration
 
             }
             );
+
+            builder.HasOne(X => X.Trainer) 
+                .WithMany(X => X.Sessions) 
+                .HasForeignKey(X => X.TrainerId);  // Foreign Key
         }
     }
 }

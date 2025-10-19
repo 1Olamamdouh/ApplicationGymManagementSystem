@@ -8,13 +8,19 @@ namespace GymManagementDAL.Entity
 {
     internal class HealthRecord:BaseEntity
     {
+        
         public decimal Weight { get; set; }
         public decimal Height { get; set; }
         public string BloodType { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
 
         //UpdatedAt inherited from BaseEntity
         //UpadedAt == LastUpdated
+         
+
+
+
+     
     }
 }
