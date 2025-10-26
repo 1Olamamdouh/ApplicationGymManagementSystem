@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entity
 {
-    internal class HealthRecord:BaseEntity
+    public class HealthRecord:BaseEntity
     {
         
         public decimal Weight { get; set; }

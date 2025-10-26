@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entity
 {
-    internal abstract class BaseEntity
+    public abstract class BaseEntity
     {
         public int Id { get; set; } // Primary key for the entity
         public DateTime CreatedAt { get; set; } // Automatically set when the entity is created

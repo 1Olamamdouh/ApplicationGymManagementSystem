@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entity
 {
-    internal class MemberSession:BaseEntity
+    public class MemberSession:BaseEntity
     {
 
         public int MemberId { get; set; } // Foreign key to Member

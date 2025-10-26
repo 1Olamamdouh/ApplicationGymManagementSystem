@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entity
 {
-    internal class MemberShip:BaseEntity
+    public class MemberShip:BaseEntity
     {
 
         // Join Table for Many-to-Many relationship between Member and Plan

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entity
 {
-    internal class Member : GymUser
+    public class Member : GymUser
     {
         //JoinDate==CreatedAt
 
-        public string? phone { get; set; }
+        public string? photo { get; set; }
 
 
 
