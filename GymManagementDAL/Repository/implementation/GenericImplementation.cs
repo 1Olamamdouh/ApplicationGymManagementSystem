@@ -28,8 +28,17 @@ namespace GymManagementDAL.Repository.implementation
             _dbContext.Set<TEntity>().Remove(entity);
             return _dbContext.SaveChanges();
         }
-
-        public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>().ToList();
+        public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? Condition = null)
+        {
+            if (Condition is null)
+            {
+                return _dbContext.Set<TEntity>().AsNoTracking().ToList(); //all members
+            }
+            else
+            {
+                return _dbContext.Set<TEntity>().AsNoTracking().Where(Condition).ToList(); //filter of all members
+            }
+        }
 
         public TEntity? GetById(int id) => _dbContext.Set<TEntity>().Find();
 

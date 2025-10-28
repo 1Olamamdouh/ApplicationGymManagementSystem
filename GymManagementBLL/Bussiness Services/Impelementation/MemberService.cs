@@ -20,6 +20,42 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
         public MemberService(IGenericRepository<Member> MemberRepository) {
             _memberRepository = MemberRepository;
         }
+
+        public bool CreateMember(CreateMemberViewModel createMember)
+        {
+            //Email or Phone not exist
+            var memberByEmail = _memberRepository.GetAll(M => M.Email == createMember.Email).Any();
+            var memberByPhone = _memberRepository.GetAll(M => M.phoneNumber == createMember.PhoneNumber).Any();
+
+            if (memberByEmail || memberByPhone) return false;
+
+            //CreateMemberViewModel=> Member 
+
+            var newMember = new Member
+            {
+                Name = createMember.Name,
+                Email = createMember.Email,
+                phoneNumber = createMember.PhoneNumber,
+                DateOfBirth = createMember.DateOfBirth,
+                Address = new Address
+                {
+                    BildingNumber = createMember.BuildingNumber.ToString(),
+                    City = createMember.City,
+                    Street = createMember.street,
+
+                },
+                HealthRecord = new HealthRecord
+                {
+                    Height = createMember.HealthRecord.Height,
+                    Weight = createMember.HealthRecord.Weight,
+                    BloodType = createMember.HealthRecord.Booltype,
+                    Note = createMember.HealthRecord.Notes,
+                },
+            };
+
+           return _memberRepository.Add(newMember) > 0;
+        }
+
         public IEnumerable<MemberViewModel> GetAllMembers()
         {
 
@@ -60,5 +96,9 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
             return listMemberViewModels;
             #endregion
         } 
+
+
+
+    
     }
 } 
