@@ -17,15 +17,18 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
         private readonly IGenericRepository<Member> _memberRepository;
         private readonly IGenericRepository<MemberShip> _memberShipRepository;
         private readonly IPlanRepository _planRepository;
+        private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
 
         //Ask CLR to inject object from class implement interface IGenericRepository<Member>
         public MemberService(IGenericRepository<Member> MemberRepository, 
                              IGenericRepository<MemberShip> MemberShipRepository, 
-                             IPlanRepository planRepository )
-        {
+                             IPlanRepository planRepository, 
+                             IGenericRepository<HealthRecord> HealthRecordRepository)
+        {  
             _memberRepository = MemberRepository;
             _memberShipRepository = MemberShipRepository;
             _planRepository = planRepository;
+            _healthRecordRepository = HealthRecordRepository;
         }
 
         public bool CreateMember(CreateMemberViewModel createMember)
@@ -135,6 +138,73 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
                 memberViewModel.Plan = plan?.Name;  
             }
             return memberViewModel;
+        }
+    
+        public HealthRecordViewModel GetHealthRecordDetalis(int memberId)
+        {
+            var memberHealthReorder = _healthRecordRepository.GetById(memberId);               
+
+            if (memberHealthReorder is null) return null!;
+
+            var healthRecordViewModel = new HealthRecordViewModel
+            {
+                Height = memberHealthReorder.Height,
+                Weight = memberHealthReorder.Weight,
+                Booltype = memberHealthReorder.BloodType,
+                Notes = memberHealthReorder.Note,
+            };
+
+            return healthRecordViewModel;
+        }
+
+        public MemberToUpdataViewModel? GetMemberDetalisToUpata(int memberId)
+        {
+            var member = _memberRepository.GetById(memberId);
+            if (member is null) return null;
+
+            var memberToUpdataViewModel = new MemberToUpdataViewModel
+            {
+                Name = member.Name,
+                Photo = member.photo,
+                PhoneNumber = member.phoneNumber,
+                Email = member.Email,
+                BuildingNumber = int.Parse( member.Address.BildingNumber),
+                City = member.Address.City,
+                street = member.Address.Street,
+            };
+            return memberToUpdataViewModel;
+
+        }
+
+        public bool UpdataMember(int memberId, MemberToUpdataViewModel memberToUpdata)
+        {
+            try
+            {
+                var EmallExists = _memberRepository
+                    .GetAll(M => M.Email == memberToUpdata.Email && M.Id != memberId).Any();
+                var PhoneExists = _memberRepository
+                    .GetAll(M => M.phoneNumber == memberToUpdata.PhoneNumber && M.Id != memberId).Any();
+
+                if (EmallExists || PhoneExists) return false;
+
+                var member = _memberRepository.GetById(memberId);
+                if (member is null) return false;
+
+                member.phoneNumber = memberToUpdata.PhoneNumber;
+                member.Email = memberToUpdata.Email;
+                member.Address.BildingNumber = memberToUpdata.BuildingNumber.ToString();
+                member.Address.City = memberToUpdata.City;
+                member.Address.Street = memberToUpdata.street;
+                member.UpdatedAt = DateTime.Now;
+
+                return _memberRepository.Update(member) > 0; //return true if update is successful
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
     }
 }
