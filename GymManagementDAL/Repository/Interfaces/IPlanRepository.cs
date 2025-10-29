@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repository.Interfaces
 {
-    internal interface IPlanRepository
+    public interface IPlanRepository
     {
         // Interface methods for PlanRepository
         //  CRUD operations

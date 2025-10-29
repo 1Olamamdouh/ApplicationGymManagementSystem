@@ -15,10 +15,17 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
     internal class MemberService : IMemberService
     {
         private readonly IGenericRepository<Member> _memberRepository;
+        private readonly IGenericRepository<MemberShip> _memberShipRepository;
+        private readonly IPlanRepository _planRepository;
 
         //Ask CLR to inject object from class implement interface IGenericRepository<Member>
-        public MemberService(IGenericRepository<Member> MemberRepository) {
+        public MemberService(IGenericRepository<Member> MemberRepository, 
+                             IGenericRepository<MemberShip> MemberShipRepository, 
+                             IPlanRepository planRepository )
+        {
             _memberRepository = MemberRepository;
+            _memberShipRepository = MemberShipRepository;
+            _planRepository = planRepository;
         }
 
         public bool CreateMember(CreateMemberViewModel createMember)
@@ -53,7 +60,7 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
                 },
             };
 
-           return _memberRepository.Add(newMember) > 0;
+            return _memberRepository.Add(newMember) > 0;
         }
 
         public IEnumerable<MemberViewModel> GetAllMembers()
@@ -95,10 +102,39 @@ namespace GymManagementBLL.Bussiness_Services.Impelementation
             });
             return listMemberViewModels;
             #endregion
-        } 
+        }
 
+        public MemberViewModel? GetMemberDitails(int memberId)
+        {
+            var member = _memberRepository.GetById(memberId);
+            if (member is null) return null;
 
+            var memberViewModel = new MemberViewModel
+            {
+                Email = member.Email,
+                Name = member.Name,
+                PhoneNumber = member.phoneNumber,
+                Photo = member.photo,
+                Gender = member.Gender.ToString(),
+                DateOfBirth = member.DateOfBirth.ToShortDateString(),
+                Address = $"{member.Address.BildingNumber}, " +
+                          $"{member.Address.Street}, " +
+                          $"{member.Address.City}",
+            };
 
-    
+            var MemberShip = _memberShipRepository
+                .GetAll(M => M.MemberId == memberId && M.Status == "Active")
+                .FirstOrDefault();
+
+            if (MemberShip is not null)
+            {
+                memberViewModel.MemberShipStartDate = MemberShip.CreatedAt.ToShortDateString();
+                memberViewModel.MemberShipEndDate = MemberShip.EndDate.ToShortDateString(); 
+            
+                var plan = _planRepository.GetPlanById(MemberShip.PlanId);
+                memberViewModel.Plan = plan?.Name;  
+            }
+            return memberViewModel;
+        }
     }
-} 
+}
